@@ -4,11 +4,11 @@ lazy val appDependencies: Seq[ModuleID] = compileDependencies ++ testDependencie
 lazy val mockitoVersion = "5.18.0"
 
 lazy val compileDependencies = Seq(
-  "software.amazon.awssdk" % "sns"             % "2.28.+",
-  "software.amazon.awssdk" % "sqs"             % "2.28.+",
-  "software.amazon.awssdk" % "aws-core"        % "2.28.+",
-  "com.amazonaws" % "aws-lambda-java-core"     % "1.3.0",
-  "software.amazon.awssdk" % "sdk-core"        % "2.28.+"
+  "software.amazon.awssdk"  % "sns"                   % "2.28.+",
+  "software.amazon.awssdk"  % "sqs"                   % "2.28.+",
+  "software.amazon.awssdk"  % "aws-core"              % "2.28.+",
+  "com.amazonaws"           % "aws-lambda-java-core"  % "1.3.0",
+  "software.amazon.awssdk"  % "sdk-core"              % "2.28.+"
 
 )
 
