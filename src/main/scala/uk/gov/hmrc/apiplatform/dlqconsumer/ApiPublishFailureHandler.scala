@@ -9,7 +9,9 @@ class ApiPublishFailureHandler  extends RequestHandler[Object,String] {
   }
 
   override def handleRequest(input: Object, context: Context): String = {
+    Console.println("Entering handleRequest")
     val snsService = getSnsService()
+    Console.println(s"SNSService is $snsService")
     snsService.sendMessage(input.toString, context)
     "sent"
     }
