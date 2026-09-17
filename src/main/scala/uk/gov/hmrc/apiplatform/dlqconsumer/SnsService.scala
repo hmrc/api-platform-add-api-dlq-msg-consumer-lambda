@@ -36,7 +36,7 @@ class SnsService()(implicit ec: ExecutionContext) {
   }
 
   private def log[T](instance: T, logger: LambdaLogger, message: String) = {
-    logger.log(message)
+    Console.println(message)
     instance
   }
 }
