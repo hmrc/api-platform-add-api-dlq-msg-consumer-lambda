@@ -3,6 +3,8 @@ import com.amazonaws.services.lambda.runtime.{Context, LambdaLogger, RequestHand
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
+import scala.concurrent.ExecutionContext.Implicits.global
+
 class ApiPublishFailureHandler  extends RequestHandler[Object,String] {
   private def getSnsService() = {
     new SnsService()
