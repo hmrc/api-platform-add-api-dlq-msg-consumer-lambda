@@ -18,7 +18,8 @@ class SnsService(snsClient: SnsClient) {
     val maybeTopic = getSNSTopic()
     val topic = maybeTopic.getOrElse(throw new Exception("Unable to get topic ARN"))
     Console.println(s"SNS Topic is $topic and topicArn is ${topic.topicArn}")
-    val publishRequest = PublishRequest.builder().topicArn(topic.topicArn()).message(message).build()
+    val publishRequest = PublishRequest.builder().topicArn(topic.topicArn()).message(message).subject("ALARM: test").build()
+    Console.println(s"Publish request is $publishRequest")
     val publishResponse = snsClient.publish(publishRequest)
     Console.println(s"Publish response is $publishResponse")
     publishResponse

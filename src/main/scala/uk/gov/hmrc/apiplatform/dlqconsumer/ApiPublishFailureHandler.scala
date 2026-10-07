@@ -10,7 +10,7 @@ class ApiPublishFailureHandler  extends RequestHandler[Object,String] {
     Console.println(s"Entering handleRequest with message of type ${input.getClass.getName}")
     val snsService = getSnsService()
     Console.println(s"SNSService is $snsService")
-    snsService.sendMessage("""{"message": {"key":"value", "key1":"value1"}}""", context)
+    snsService.sendMessage("""{"NewStateValue": "ALARM"}""", context)
     "sent"
     }
   }
