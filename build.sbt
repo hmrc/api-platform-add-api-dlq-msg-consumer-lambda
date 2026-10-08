@@ -8,8 +8,8 @@ lazy val compileDependencies = Seq(
   "software.amazon.awssdk"  % "sqs"                   % "2.28.+",
   "software.amazon.awssdk"  % "aws-core"              % "2.28.+",
   "com.amazonaws"           % "aws-lambda-java-core"  % "1.3.0",
-  "software.amazon.awssdk"  % "sdk-core"              % "2.28.+"
-
+  "software.amazon.awssdk"  % "sdk-core"              % "2.28.+",
+  "com.amazonaws" % "aws-lambda-java-events" % "3.16.1"
 )
 
 lazy val testDependencies = Seq(

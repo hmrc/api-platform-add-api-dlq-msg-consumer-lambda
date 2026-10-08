@@ -1,16 +1,24 @@
 package uk.gov.hmrc.apiplatform.dlqconsumer
+import com.amazonaws.services.lambda.runtime.events.SQSEvent
 import com.amazonaws.services.lambda.runtime.{Context, RequestHandler}
+import uk.gov.hmrc.apiplatform.dlqconsumer.SnsServiceProvider.dlqSnsService
 
-class ApiPublishFailureHandler  extends RequestHandler[Object,String] {
-  private def getSnsService() = {
-    new SnsService()
+import scala.collection.convert.ImplicitConversions.`collection AsScalaIterable`
+
+class ApiPublishFailureHandler(snsService: SnsService)  extends RequestHandler[SQSEvent, Unit] {
+  def this() {
+    this(dlqSnsService)
   }
 
-  override def handleRequest(input: Object, context: Context): String = {
+  override def handleRequest(input: SQSEvent, context: Context): Unit = {
     Console.println(s"Entering handleRequest with message of type ${input.getClass.getName}")
-    val snsService = getSnsService()
-    Console.println(s"SNSService is $snsService")
-    snsService.sendMessage("""{"message": {"key":"value", "key1":"value1"}}""", context)
-    "sent"
+    input.getRecords.foreach { sqsMsg =>
+       sendEventBody(sqsMsg.getBody)
+    }
+
+    def sendEventBody(msgBody: String): Unit = {
+      val responseMsgId = snsService.sendMessage(s"""{"NewStateValue": "ALARM", "detail": "$msgBody"}""", context).messageId
+      Console.println(s"PublishResponse message ID is $responseMsgId")
+      }
     }
   }
