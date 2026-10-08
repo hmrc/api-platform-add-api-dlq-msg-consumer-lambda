@@ -17,7 +17,7 @@ class ApiPublishFailureHandler(snsService: SnsService)  extends RequestHandler[S
     }
 
     def sendEventBody(msgBody: String): Unit = {
-      val responseMsgId = snsService.sendMessage(s"""{"NewStateValue": "ALARM", "detail": "$msgBody"}""", context).messageId
+      val responseMsgId = snsService.sendMessage(s"""{"AlarmDescription": "AWS API Gateway publishing failure", "NewStateValue": "ALARM", "detail": $msgBody}""", context).messageId
       Console.println(s"PublishResponse message ID is $responseMsgId")
       }
     }
