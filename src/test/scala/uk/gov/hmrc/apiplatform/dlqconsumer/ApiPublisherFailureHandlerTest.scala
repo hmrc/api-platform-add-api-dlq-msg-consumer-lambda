@@ -8,7 +8,6 @@ import org.mockito.Mockito.{verify, when}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.mockito.MockitoSugar
-import software.amazon.awssdk.services.sns.SnsClient
 import software.amazon.awssdk.services.sns.model._
 
 import java.util.Collections
@@ -24,11 +23,7 @@ val sqsMessageBody = """{"paths":{"/{name}":{"get":{"parameters":[{"name":"name"
   sqsMessage.setAwsRegion("eu-west-2")
   val sqsEvent: SQSEvent = new SQSEvent()
   sqsEvent.setRecords(Collections.singletonList(sqsMessage))
-<<<<<<< Updated upstream
-  val expectedSnsMsgBody = s"""{"NewStateValue": "ALARM", "detail": "$sqsMessageBody"}"""
-=======
   val expectedSnsMsgBody = s"""{"NewStateValue": "ALARM", "detail": $sqsMessageBody}"""
->>>>>>> Stashed changes
   trait Setup {
     val mockSnsService: SnsService = mock[SnsService]
     val mockContext: Context = mock[Context]
