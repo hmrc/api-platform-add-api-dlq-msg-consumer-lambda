@@ -8,3 +8,7 @@ object SnsClientProvider {
       .region(Region.EU_WEST_2)
       .build()
   }
+
+object SnsServiceProvider {
+  lazy val dlqSnsService:SnsService = new SnsService()
+}
