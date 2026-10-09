@@ -4,12 +4,12 @@ lazy val appDependencies: Seq[ModuleID] = compileDependencies ++ testDependencie
 lazy val mockitoVersion = "5.18.0"
 
 lazy val compileDependencies = Seq(
-  "software.amazon.awssdk"  % "sns"                   % "2.28.+",
-  "software.amazon.awssdk"  % "sqs"                   % "2.28.+",
-  "software.amazon.awssdk"  % "aws-core"              % "2.28.+",
-  "com.amazonaws"           % "aws-lambda-java-core"  % "1.3.0",
-  "software.amazon.awssdk"  % "sdk-core"              % "2.28.+",
-  "com.amazonaws" % "aws-lambda-java-events" % "3.16.1"
+  "software.amazon.awssdk"  % "sns"                     % "2.28.+",
+  "software.amazon.awssdk"  % "sqs"                     % "2.28.+",
+  "software.amazon.awssdk"  % "aws-core"                % "2.28.+",
+  "com.amazonaws"           % "aws-lambda-java-core"    % "1.3.0",
+  "software.amazon.awssdk"  % "sdk-core"                % "2.28.+",
+  "com.amazonaws"           % "aws-lambda-java-events"  % "3.16.1"
 )
 
 lazy val testDependencies = Seq(
@@ -19,6 +19,13 @@ lazy val testDependencies = Seq(
 ).map(_ % Test)
 
 lazy val plugins: Seq[Plugins] = Seq()
+
+inThisBuild(
+   List(
+     semanticdbEnabled := true,
+     semanticdbVersion := scalafixSemanticdb.revision
+   )
+ )
 
 lazy val lambda = (project in file("."))
   .enablePlugins(plugins: _*)
@@ -47,7 +54,6 @@ lazy val lambda = (project in file("."))
         oldStrategy(path)
     }
   )
-
 coverageMinimumStmtTotal := 85
 coverageMinimumBranchTotal := 85
 coverageFailOnMinimum := true
