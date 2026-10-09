@@ -16,7 +16,6 @@ class SnsServiceTest  extends AnyWordSpec with Matchers with MockitoSugar {
 
   trait Setup {
     val mockSnsClient: SnsClient = mock[SnsClient]
-    val mockContext: Context = mock[Context]
     val snsService = new SnsService(mockSnsClient)
   }
 
@@ -29,7 +28,7 @@ class SnsServiceTest  extends AnyWordSpec with Matchers with MockitoSugar {
       when(mockSnsClient.listTopics(request)).thenReturn(listTopicsResponse)
       when(mockSnsClient.publish(any[PublishRequest])).thenReturn(publishResponse)
 
-      val result = snsService.sendMessage("message", mockContext)
+      val result = snsService.sendMessage("message")
 
       result shouldEqual publishResponse
     }

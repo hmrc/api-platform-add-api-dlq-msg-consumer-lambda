@@ -33,11 +33,11 @@ val sqsMessageBody = """{"paths":{"/{name}":{"get":{"parameters":[{"name":"name"
   "send message" should {
     "successfully send a message" in new Setup {
       val publishResponse = PublishResponse.builder().build()
-      when(mockSnsService.sendMessage(any[String],any[Context])).thenReturn(publishResponse)
+      when(mockSnsService.sendMessage(any[String])).thenReturn(publishResponse)
 
       val result = subject.handleRequest(sqsEvent, mockContext)
 
-      verify(mockSnsService).sendMessage(expectedSnsMsgBody, mockContext)
+      verify(mockSnsService).sendMessage(expectedSnsMsgBody)
       result shouldEqual ()
     }
   }

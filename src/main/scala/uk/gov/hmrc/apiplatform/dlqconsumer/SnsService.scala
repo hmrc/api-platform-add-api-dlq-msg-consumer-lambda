@@ -13,13 +13,10 @@ class SnsService(snsClient: SnsClient) {
     this(dlqSnsClient)
   }
 
-  def sendMessage(message: String, context: Context): PublishResponse = {
-    Console.println(s"Entering SNSService.sendMessage with message $message")
+  def sendMessage(message: String): PublishResponse = {
     val maybeTopic = getSNSTopic()
     val topic = maybeTopic.getOrElse(throw new Exception("Unable to get topic ARN"))
-    Console.println(s"SNS Topic is $topic and topicArn is ${topic.topicArn}")
     val publishRequest = PublishRequest.builder().topicArn(topic.topicArn()).message(message).subject("ALARM: test").build()
-    Console.println(s"Publish request is $publishRequest")
     val publishResponse = snsClient.publish(publishRequest)
     Console.println(s"Publish response is $publishResponse")
     publishResponse
