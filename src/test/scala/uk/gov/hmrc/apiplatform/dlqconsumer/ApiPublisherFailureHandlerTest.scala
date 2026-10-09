@@ -23,7 +23,7 @@ val sqsMessageBody = """{"paths":{"/{name}":{"get":{"parameters":[{"name":"name"
   sqsMessage.setAwsRegion("eu-west-2")
   val sqsEvent: SQSEvent = new SQSEvent()
   sqsEvent.setRecords(Collections.singletonList(sqsMessage))
-  val expectedSnsMsgBody = s"""{"NewStateValue": "ALARM", "detail": $sqsMessageBody}"""
+  val expectedSnsMsgBody = s"""{"AlarmDescription": "AWS API Gateway publishing failure", "NewStateValue": "ALARM", "detail": $sqsMessageBody}"""
   trait Setup {
     val mockSnsService: SnsService = mock[SnsService]
     val mockContext: Context = mock[Context]
