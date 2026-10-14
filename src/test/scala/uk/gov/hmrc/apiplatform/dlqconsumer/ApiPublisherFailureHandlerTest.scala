@@ -1,5 +1,7 @@
 package uk.gov.hmrc.apiplatform.dlqconsumer
 
+import java.util.Collections
+
 import com.amazonaws.services.lambda.runtime.Context
 import com.amazonaws.services.lambda.runtime.events.SQSEvent
 import com.amazonaws.services.lambda.runtime.events.SQSEvent.SQSMessage
@@ -10,11 +12,10 @@ import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.mockito.MockitoSugar
 import software.amazon.awssdk.services.sns.model._
 
-import java.util.Collections
-
-class ApiPublisherFailureHandlerTest  extends AnyWordSpec with Matchers with MockitoSugar {
-val sqsMessageBody = """{"paths":{"/{name}":{"get":{"parameters":[{"name":"name","required":true,"type":"string","description":"","in":"path"}],"responses":{"200":{"description":"OK"}},"x-auth-type":"None","x-throttling-tier":"Unlimited"}},"/{year}":{"get":{"parameters":[{"name":"year","required":true,"type":"string","description":"","in":"path"}],"responses":{"200":{"description":"OK"}},"x-auth-type":"None","x-throttling-tier":"Unlimited"}}},"info":{"title":"hello--3.0","version":"3.0"},"swagger":"2.0","basePath":"/hello","host":"api-example-microservice.protected.mdtp"}"""
-  val sqsMessage = new SQSMessage
+class ApiPublisherFailureHandlerTest extends AnyWordSpec with Matchers with MockitoSugar {
+  val sqsMessageBody     =
+    """{"paths":{"/{name}":{"get":{"parameters":[{"name":"name","required":true,"type":"string","description":"","in":"path"}],"responses":{"200":{"description":"OK"}},"x-auth-type":"None","x-throttling-tier":"Unlimited"}},"/{year}":{"get":{"parameters":[{"name":"year","required":true,"type":"string","description":"","in":"path"}],"responses":{"200":{"description":"OK"}},"x-auth-type":"None","x-throttling-tier":"Unlimited"}}},"info":{"title":"hello--3.0","version":"3.0"},"swagger":"2.0","basePath":"/hello","host":"api-example-microservice.protected.mdtp"}"""
+  val sqsMessage         = new SQSMessage
   sqsMessage.setMessageId("8f696342-757f-4940-bf55-eb474ec5a1ca")
   sqsMessage.setBody(sqsMessageBody)
   sqsMessage.setEventSource("aws:sqs")
@@ -24,20 +25,21 @@ val sqsMessageBody = """{"paths":{"/{name}":{"get":{"parameters":[{"name":"name"
   val sqsEvent: SQSEvent = new SQSEvent()
   sqsEvent.setRecords(Collections.singletonList(sqsMessage))
   val expectedSnsMsgBody = s"""{"AlarmDescription": "AWS API Gateway publishing failure", "NewStateValue": "ALARM", "detail": $sqsMessageBody}"""
+
   trait Setup {
     val mockSnsService: SnsService = mock[SnsService]
-    val mockContext: Context = mock[Context]
-    val subject = new ApiPublishFailureHandler(mockSnsService)
+    val mockContext: Context       = mock[Context]
+    val subject                    = new ApiPublishFailureHandler(mockSnsService)
   }
 
   "send message" should {
     "successfully send a message" in new Setup {
       val publishResponse = PublishResponse.builder().build()
-      when(mockSnsService.sendMessage(any[String],any[Context])).thenReturn(publishResponse)
+      when(mockSnsService.sendMessage(any[String])).thenReturn(publishResponse)
 
       val result = subject.handleRequest(sqsEvent, mockContext)
 
-      verify(mockSnsService).sendMessage(expectedSnsMsgBody, mockContext)
+      verify(mockSnsService).sendMessage(expectedSnsMsgBody)
       result shouldEqual ()
     }
   }
